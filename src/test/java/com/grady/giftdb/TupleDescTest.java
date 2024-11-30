@@ -9,7 +9,8 @@ public class TupleDescTest {
     /**
      * Unit test for TupleDesc.combine()
      */
-    @Test public void combine() {
+    @Test
+    public void combine() {
         TupleDesc td1, td2, td3;
 
         td1 = Utility.getTupleDesc(1, "td1");

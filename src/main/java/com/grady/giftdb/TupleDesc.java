@@ -2,6 +2,7 @@ package com.grady.giftdb;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * TupleDesc describes the schema of a tuple.
@@ -62,6 +63,12 @@ public class TupleDesc implements Serializable {
      */
     public TupleDesc(Type[] typeAr, String[] fieldAr) {
         // some code goes here
+        assert typeAr.length == fieldAr.length;
+        this.itemList = new ArrayList<>(typeAr.length);
+        for (int i = 0; i < typeAr.length; i++) {
+            TDItem item = new TDItem(typeAr[i], fieldAr[i]);
+            this.itemList.add(item);
+        }
     }
 
     /**
@@ -86,7 +93,7 @@ public class TupleDesc implements Serializable {
      */
     public int numFields() {
         // some code goes here
-        return 0;
+        return this.itemList.size();
     }
 
     /**
@@ -138,7 +145,12 @@ public class TupleDesc implements Serializable {
      */
     public int getSize() {
         // some code goes here
-        return 0;
+        int ret = 0;
+        for (int i = 0; i < this.itemList.size(); i++) {
+            TDItem item = this.itemList.get(i);
+            ret += item.fieldType.getLen();
+        }
+        return ret;
     }
 
     /**
@@ -153,7 +165,17 @@ public class TupleDesc implements Serializable {
      */
     public static TupleDesc merge(TupleDesc td1, TupleDesc td2) {
         // some code goes here
-        return null;
+        List<TDItem> items = new ArrayList<>();
+        items.addAll(td1.itemList);
+        items.addAll(td2.itemList);
+
+        Type[] typeArr = new Type[items.size()];
+        String [] fieldArr = new String[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            typeArr[i] = items.get(i).fieldType;
+            fieldArr[i] = items.get(i).fieldName;
+        }
+        return new TupleDesc(typeArr, fieldArr);
     }
 
     /**
@@ -166,16 +188,17 @@ public class TupleDesc implements Serializable {
      *            the Object to be compared for equality with this TupleDesc.
      * @return true if the object is equal to this TupleDesc.
      */
-
+    @Override
     public boolean equals(Object o) {
-        // some code goes here
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TupleDesc tupleDesc = (TupleDesc) o;
+        return Objects.equals(itemList, tupleDesc.itemList);
     }
 
+    @Override
     public int hashCode() {
-        // If you want to use TupleDesc as keys for HashMap, implement this so
-        // that equal objects have equals hashCode() results
-        throw new UnsupportedOperationException("unimplemented");
+        return Objects.hash(itemList);
     }
 
     /**
@@ -187,6 +210,7 @@ public class TupleDesc implements Serializable {
      */
     public String toString() {
         // some code goes here
-        return "";
+        //todo
+        return String.join(",", this.itemList.stream().map(TDItem::toString).collect(Collectors.toList()));
     }
 }

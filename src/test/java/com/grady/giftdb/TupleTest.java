@@ -31,4 +31,35 @@ public class TupleTest {
         assertEquals(new IntField(1), tup.getField(0));
         assertEquals(new IntField(37), tup.getField(1));
     }
+
+    /**
+     * Unit test for Tuple.getTupleDesc()
+     */
+    @Test
+    public void getTupleDesc() {
+        TupleDesc td = Utility.getTupleDesc(5);
+        Tuple tup = new Tuple(td);
+        TupleDesc tupleDesc = tup.getTupleDesc();
+        assertEquals(td, tupleDesc);
+    }
+
+    /**
+     * Unit test for Tuple.getRecordId() and Tuple.setRecordId()
+     */
+    @Test
+    public void modifyRecordId() {
+        Tuple tup1 = new Tuple(Utility.getTupleDesc(1));
+        HeapPageId pid1 = new HeapPageId(0,0);
+        RecordId rid1 = new RecordId(pid1, 0);
+        tup1.setRecordId(rid1);
+
+        try {
+            assertEquals(rid1, tup1.getRecordId());
+        } catch (java.lang.UnsupportedOperationException e) {
+            //rethrow the exception with an explanation
+            throw new UnsupportedOperationException("modifyRecordId() test failed due to " +
+                    "RecordId.equals() not being implemented.  This is not required for Lab 1, " +
+                    "but should pass when you do implement the RecordId class.");
+        }
+    }
 }

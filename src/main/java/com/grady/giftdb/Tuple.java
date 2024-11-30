@@ -1,10 +1,8 @@
 package com.grady.giftdb;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Tuple maintains information about the contents of a tuple. Tuples have a
@@ -16,6 +14,10 @@ public class Tuple implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private TupleDesc tupleDesc;
+    private RecordId recordId;
+
+    private Map<Integer, Field> fieldMap = new HashMap<>();
+
 
     /**
      * Create a new tuple with the specified schema (type).
@@ -34,7 +36,7 @@ public class Tuple implements Serializable {
      */
     public TupleDesc getTupleDesc() {
         // some code goes here
-        return null;
+        return this.tupleDesc;
     }
 
     /**
@@ -43,7 +45,7 @@ public class Tuple implements Serializable {
      */
     public RecordId getRecordId() {
         // some code goes here
-        return null;
+        return this.recordId;
     }
 
     /**
@@ -54,9 +56,9 @@ public class Tuple implements Serializable {
      */
     public void setRecordId(RecordId rid) {
         // some code goes here
+        this.recordId = rid;
     }
 
-    Map<Integer, Field> fieldMap = new HashMap<>();
 
     /**
      * Change the value of the ith field of this tuple.
@@ -96,7 +98,13 @@ public class Tuple implements Serializable {
      */
     public String toString() {
         // some code goes here
-        throw new UnsupportedOperationException("Implement this");
+        List<String> collect =
+                this.fieldMap.entrySet().stream()
+                        .sorted(Comparator.comparingInt(Map.Entry::getKey))
+                        .map(t -> t.getValue().toString())
+                        .collect(Collectors.toList());
+
+        return String.join(" ", collect);
     }
 
     /**
