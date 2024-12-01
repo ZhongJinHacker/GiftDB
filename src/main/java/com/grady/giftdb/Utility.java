@@ -42,5 +42,14 @@ public class Utility {
         return new TupleDesc(getTypes(n), getStrings(n, name));
     }
 
+
+    public static String listToString(ArrayList<Integer> list) {
+        String out = "";
+        for (Integer i : list) {
+            if (out.length() > 0) out += "\t";
+            out += i;
+        }
+        return out;
+    }
 }
 
