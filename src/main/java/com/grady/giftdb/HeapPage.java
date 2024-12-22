@@ -304,7 +304,8 @@ public class HeapPage implements Page {
      */
     public Iterator<Tuple> iterator() {
         // some code goes here
-        return null;
+        List<Tuple> list = Arrays.asList(this.tuples);
+        return list.iterator();
     }
 
 }

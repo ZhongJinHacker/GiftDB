@@ -84,7 +84,8 @@ public class HeapPageReadTest {
     /**
      * Unit test for HeapPage.iterator()
      */
-    @Test public void testIterator() throws Exception {
+    @Test
+    public void testIterator() throws Exception {
         HeapPage page = new HeapPage(pid, EXAMPLE_DATA);
         Iterator<Tuple> it = page.iterator();
 
